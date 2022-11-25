@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <vector>
-#include <unordered_set>
 
 using namespace std;
 
@@ -64,12 +63,7 @@ int main(void) {
 			continue;
 		}
 
-		if (visit[pos] == time) {
-			printf("%d\n", time);
-			return 0;
-		}
-
-		if (visit[pos] < time) {
+		if (visit[pos] <= time) {
 			if ((time - visit[pos]) % 2 == 0) {
 				printf("%d\n", time);
 				return 0;
