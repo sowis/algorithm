@@ -25,6 +25,10 @@ typedef struct _data {
 } Data;
 
 int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	int N, M;
 	cin >> N >> M;
 
