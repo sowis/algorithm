@@ -5,61 +5,62 @@
 using namespace std;
 
 int N;
+vector<pair<int, int>> eggs;
+int result = 0;
 
-int solve(vector<pair<int, int>>& eggs, const int index = 0) {
-	if (index == N) {
-		int result = 0;
+void egg_break(const int idx = 0) {
+	if (idx == N) {
+		int break_count = 0;
 		for (const pair<int, int>& egg : eggs) {
 			if (egg.first <= 0) {
-				++result;
+				++break_count;
 			}
 		}
 
-		return result;
+		result = max(result, break_count);
+		return;
 	}
 
-	if (eggs[index].first <= 0) {
-		return solve(eggs, index + 1);
+	if (eggs[idx].first <= 0) {
+		egg_break(idx + 1);
+		return;
 	}
 
-	int result = 0;
-	const pair<int, int> me = eggs[index];
+	const pair<int, int> backup_me = eggs[idx];
+	bool hit = false;
 
-	for (int target_index = 0; target_index < N; ++target_index) {
-		if (eggs[target_index].first <= 0) {
+	for (int target_idx = 0; target_idx < N; ++target_idx) {
+		if (target_idx == idx) {
 			continue;
 		}
 
-		if (target_index == index) {
+		if (eggs[target_idx].first <= 0) {
 			continue;
 		}
 
-		const pair<int, int> target = eggs[target_index];
-		eggs[index].first -= eggs[target_index].second;
-		eggs[target_index].first -= eggs[index].second;
-
-		result = max(result, solve(eggs, index + 1));
-
-		eggs[index] = me;
-		eggs[target_index] = target;
+		const pair<int, int> backup_target = eggs[target_idx];
+		eggs[target_idx].first -= eggs[idx].second;
+		eggs[idx].first -= eggs[target_idx].second;
+		egg_break(idx + 1);
+		eggs[target_idx] = backup_target;
+		eggs[idx] = backup_me;
+		hit = true;
 	}
 
-	if (index == N - 1) {
-		result = max(result, solve(eggs, index + 1));
+	if (hit == false) {
+		egg_break(idx + 1);
 	}
-
-	return result;
 }
 
 int main(void) {
 	scanf("%d", &N);
 
-	vector<pair<int, int>> eggs(N);
-	for (pair<int, int>& egg : eggs) {
-		scanf("%d%d", &egg.first, &egg.second);
+	eggs = vector<pair<int, int>>(N);
+	for (pair<int, int>& p : eggs) {
+		scanf("%d%d", &p.first, &p.second);
 	}
 
-	const int result = solve(eggs);
+	egg_break();
 
 	printf("%d\n", result);
 
