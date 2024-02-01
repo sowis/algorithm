@@ -23,14 +23,13 @@ int main(void) {
 		vector<int> v = p.second;
 		sort(v.begin(), v.end());
 
-		int min_dist = 987654321;
-		int cur = v[0];
-		for (int i = 1; i < v.size(); ++i) {
-			min_dist = min(min_dist, v[i] - cur);
-			cur = v[i];
+		result += v[1] - v[0];
+		
+		for (int i = 1; i < v.size() - 1; ++i) {
+			result += min(v[i] - v[i - 1], v[i + 1] - v[i]);
 		}
 
-		result += v[v.size() - 1] - v[0] + min_dist;
+		result += v[v.size() - 1] - v[v.size() - 2];
 	}
 
 	printf("%d\n", result);
