@@ -23,14 +23,12 @@ bool can_go(const int no_rest_dist) {
 		}
 
 		if (remain_create_rest == 0) {
-			break;
+			return false;
 		}
 
 		--remain_create_rest;
 		current += no_rest_dist;
 	}
-
-	return false;
 }
 
 int main(void) {
