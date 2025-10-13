@@ -55,8 +55,7 @@ int main(void) {
 	for (const pair<string, double>& p : score_map) {
 		const double score = p.second;
 
-		// cout << "target: " << floor(target) << "   cur: " << p.first << "  value: " << floor((c_mul_g_sum + score * current_c) / c_sum) << "\n"; // test
-
+		// target 에 floor 처리하면 안되고 round 처리하면 되는 이유를 모르겠음...
 		if (round(target) < floor((c_mul_g_sum + score * current_c) / c_sum)) {
 			cout << p.first;
 			return 0;
