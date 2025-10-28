@@ -7,14 +7,35 @@ using namespace std;
 constexpr int directions[3][2] = { {-1, -1}, {-1, 0}, {0, -1} };
 
 vector<int> segtree;
+vector<int> segtree_lazy;
+
+void lazy(const int begin, const int end, const int idx) {
+	segtree[idx] += segtree_lazy[idx];
+	if (end - begin == 1) {
+		segtree_lazy[idx] = 0;
+		return;
+	}
+
+	segtree_lazy[idx * 2] += segtree_lazy[idx];
+	segtree_lazy[idx * 2 + 1] += segtree_lazy[idx];
+	segtree_lazy[idx] = 0;
+}
 
 int segtree_add(const int begin, const int end, const int target_begin, const int target_end, const int value, const int idx = 1) {
+	lazy(begin, end, idx);
+
 	if (end <= target_begin || target_end <= begin) {
 		return 0;
 	}
 
 	if (end - begin == 1) {
 		segtree[idx] += value;
+		return segtree[idx];
+	}
+
+	if (target_begin <= begin && end <= target_end) {
+		segtree_lazy[idx] += value;
+		lazy(begin, end, idx);
 		return segtree[idx];
 	}
 
@@ -25,6 +46,8 @@ int segtree_add(const int begin, const int end, const int target_begin, const in
 }
 
 int segtree_get(const int begin, const int end, const int target_begin, const int target_end, const int idx = 1) {
+	lazy(begin, end, idx);
+
 	if (end <= target_begin || target_end <= begin) {
 		return 0;
 	}
@@ -52,6 +75,7 @@ int main(void) {
 	cin >> M >> N;
 
 	segtree = vector<int>(2 * M * 5, 1);
+	segtree_lazy = vector<int>(2 * M * 5, 0);
 	for (int i = 0; i < N; ++i) {
 		int count_0, count_1, count_2;
 		cin >> count_0 >> count_1 >> count_2;
