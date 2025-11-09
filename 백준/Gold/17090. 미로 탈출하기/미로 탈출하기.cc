@@ -30,6 +30,10 @@ int solve(const int y, const int x) {
 }
 
 int main(void) {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	directions['U'] = { -1, 0 };
 	directions['R'] = { 0, 1 };
 	directions['D'] = { 1, 0 };
